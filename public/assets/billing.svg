@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" fill="none">
+  <rect width="640" height="360" rx="28" fill="#EEF4FF"/>
+  <rect x="86" y="68" width="468" height="224" rx="18" fill="#FFFFFF" stroke="#C7D8F6"/>
+  <rect x="122" y="102" width="200" height="20" rx="6" fill="#9BB7EA"/>
+  <rect x="122" y="136" width="398" height="1" fill="#D9E5FA"/>
+  <rect x="122" y="154" width="118" height="12" rx="4" fill="#C5D6F5"/>
+  <rect x="122" y="176" width="198" height="12" rx="4" fill="#E1EBFC"/>
+  <rect x="122" y="198" width="164" height="12" rx="4" fill="#E1EBFC"/>
+  <rect x="370" y="154" width="150" height="74" rx="12" fill="#123B82"/>
+  <text x="385" y="187" fill="#fff" font-family="Segoe UI" font-size="20">IVA 13%</text>
+  <rect x="122" y="244" width="398" height="20" rx="8" fill="#D5E2F9"/>
+</svg>

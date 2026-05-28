@@ -1,0 +1,617 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DentalFlow SV</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.86 0-7 2.24-7 5v1h14v-1c0-2.76-3.14-5-7-5Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M6 3h9l3 3v15H6V3Zm8 1.5V7h2.5L14 4.5ZM8 10h8v1.5H8V10Zm0 3.5h8V15H8v-1.5Zm0 3.5h6v1.5H8V17Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-bill" viewBox="0 0 24 24">
+        <path d="M6 3h12v18l-2-1-2 1-2-1-2 1-2-1-2 1V3Zm2 4v2h8V7H8Zm0 4v2h8v-2H8Zm0 4v2h5v-2H8Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-calendar" viewBox="0 0 24 24">
+        <path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2Zm11 7H6v11h12V9ZM8 12h3v3H8v-3Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24">
+        <path d="M4 20V4h2v14h14v2H4Zm4-3v-5h2v5H8Zm4 0V8h2v9h-2Zm4 0v-7h2v7h-2Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-team" viewBox="0 0 24 24">
+        <path d="M9 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm6 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3ZM3 19c0-2.21 2.69-4 6-4s6 1.79 6 4v1H3v-1Zm9.8 1H21v-1c0-1.72-1.55-3.15-3.8-3.73A7.39 7.39 0 0 0 15 15c-1.54 0-2.95.42-4.2 1.1.89.95 1.43 2.07 1.43 3.25V20Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-log" viewBox="0 0 24 24">
+        <path d="M5 3h14v18H5V3Zm2 3v2h10V6H7Zm0 4v2h10v-2H7Zm0 4v2h7v-2H7Z" fill="currentColor"/>
+      </symbol>
+    </svg>
+
+    <div id="login-view" class="auth-shell">
+      <div class="auth-card">
+        <h1>DentalFlow SV</h1>
+        <p>Gestion integral odontologica para clinicas en El Salvador</p>
+        <form id="login-form" class="form-grid">
+          <label>Usuario
+            <input id="login-username" required autocomplete="username" />
+          </label>
+          <label>Contrasena
+            <input id="login-password" type="password" required autocomplete="current-password" />
+          </label>
+          <button type="submit">Iniciar Sesion</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="app-view" class="app-shell hidden">
+      <aside class="sidebar">
+        <div>
+          <h2>DentalFlow</h2>
+          <p id="session-user-tag" class="session-tag"></p>
+        </div>
+        <nav class="nav-menu">
+          <button class="nav-btn" data-view="patients-list">
+            <svg class="icon-svg nav-icon" viewBox="0 0 24 24"><use href="#icon-file"></use></svg>
+            <span>Expedientes</span>
+          </button>
+          <button class="nav-btn" data-view="billing-list">
+            <svg class="icon-svg nav-icon" viewBox="0 0 24 24"><use href="#icon-bill"></use></svg>
+            <span>Facturacion</span>
+          </button>
+          <button class="nav-btn" data-view="appointments-list">
+            <svg class="icon-svg nav-icon" viewBox="0 0 24 24"><use href="#icon-calendar"></use></svg>
+            <span>Agenda</span>
+          </button>
+          <button class="nav-btn" data-view="reports">
+            <svg class="icon-svg nav-icon" viewBox="0 0 24 24"><use href="#icon-chart"></use></svg>
+            <span>Reportes</span>
+          </button>
+          <button class="nav-btn hidden" id="admin-audit-btn" data-view="audit">
+            <svg class="icon-svg nav-icon" viewBox="0 0 24 24"><use href="#icon-log"></use></svg>
+            <span>Bitacora</span>
+          </button>
+          <button class="nav-btn hidden" id="admin-users-btn" data-view="users-list">
+            <svg class="icon-svg nav-icon" viewBox="0 0 24 24"><use href="#icon-team"></use></svg>
+            <span>Usuarios</span>
+          </button>
+        </nav>
+        <button id="logout-btn" class="secondary">Cerrar Sesion</button>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <h1 id="view-title">Mi Usuario</h1>
+            <p id="view-subtitle">Gestion de sesion y seguridad</p>
+          </div>
+          <div class="topbar-right">
+            <button id="open-profile-btn" class="topbar-icon-btn" title="Mi Usuario">
+              <svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-user"></use></svg>
+            </button>
+            <div class="global-search-wrap">
+              <input id="global-search" type="search" placeholder="Buscar paciente, factura, cita..." autocomplete="off" />
+              <div id="global-search-results" class="global-search-results hidden"></div>
+            </div>
+          </div>
+        </header>
+
+        <section id="view-profile" class="view active">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-user"></use></svg></div>
+            <div>
+              <h3>Centro de Usuario</h3>
+              <p>Aqui gestionas tu sesion, seguridad y datos de acceso del sistema clinico.</p>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Accesos Rapidos</h3>
+            <div class="quick-grid">
+              <button class="quick-tile" data-go-view="patients-list">
+                <span class="tile-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-file"></use></svg></span>
+                <span>Expedientes</span>
+              </button>
+              <button class="quick-tile" data-go-view="billing-list">
+                <span class="tile-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-bill"></use></svg></span>
+                <span>Facturacion</span>
+              </button>
+              <button class="quick-tile" data-go-view="appointments-list">
+                <span class="tile-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-calendar"></use></svg></span>
+                <span>Agenda</span>
+              </button>
+              <button class="quick-tile" data-go-view="reports">
+                <span class="tile-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-chart"></use></svg></span>
+                <span>Reportes</span>
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Resumen Diario</h3>
+            <div id="dashboard-kpis" class="report-grid"></div>
+          </div>
+          <div class="card">
+            <h3>Alertas de Citas</h3>
+            <div id="alerts-list" class="list-summary"></div>
+          </div>
+          <div class="card">
+            <h3>Proximas 5 Citas</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Paciente</th>
+                    <th>Motivo</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-upcoming-table">
+                  <tr><td colspan="4">Sin citas proximas.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Perfil de Sesion</h3>
+            <div id="profile-summary" class="summary-grid"></div>
+          </div>
+          <div class="card">
+            <h3>Cambiar Contrasena</h3>
+            <form id="password-form" class="form-grid two-col">
+              <label>Contrasena actual
+                <input id="current-password" type="password" required />
+              </label>
+              <label>Nueva contrasena
+                <input id="new-password" type="password" required />
+              </label>
+              <div class="span-2 actions">
+                <button type="submit">Actualizar Contrasena</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="view-patients-list" class="view">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-file"></use></svg></div>
+            <div>
+              <h3>Expedientes Odontologicos</h3>
+              <p>Consulta y administra los historiales clinicos de cada paciente.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head">
+              <h3>Listado de Expedientes</h3>
+              <button id="open-patient-form">+ Agregar Expediente</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Paciente</th>
+                    <th>DUI</th>
+                    <th>Telefono</th>
+                    <th>Actualizado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="patients-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-patients-form" class="view">
+          <div class="card">
+            <div class="section-head">
+              <h3 id="patient-form-title">Nuevo Expediente</h3>
+              <button id="back-patients-list" class="secondary">Volver al Listado</button>
+            </div>
+            <form id="patient-form" class="form-grid two-col">
+              <input type="hidden" id="patient-id" />
+              <label>Nombre Completo
+                <input id="fullName" required />
+              </label>
+              <label>DUI
+                <input id="dui" required />
+              </label>
+              <label>Fecha de Nacimiento
+                <input id="birthDate" type="date" />
+              </label>
+              <label>Telefono
+                <input id="phone" required />
+              </label>
+              <details class="span-2 advanced-block">
+                <summary>Mas datos del paciente</summary>
+                <div class="advanced-grid">
+                  <label>NIT
+                    <input id="nit" />
+                  </label>
+                  <label>Correo
+                    <input id="email" type="email" />
+                  </label>
+                  <label class="span-2">Direccion
+                    <input id="address" />
+                  </label>
+                </div>
+              </details>
+              <details class="span-2 advanced-block">
+                <summary>Campos Avanzados del Expediente</summary>
+                <div class="advanced-grid">
+                  <label class="span-2">Alergias
+                    <textarea id="allergies" rows="2"></textarea>
+                  </label>
+                  <label class="span-2">Historial Medico
+                    <textarea id="medicalHistory" rows="3"></textarea>
+                  </label>
+                  <label class="span-2">Notas Odontologicas
+                    <textarea id="odontologicalNotes" rows="3"></textarea>
+                  </label>
+                </div>
+              </details>
+              <div class="span-2 actions">
+                <button type="submit" id="save-patient">Guardar Expediente</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="view-billing-list" class="view">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-bill"></use></svg></div>
+            <div>
+              <h3>Facturacion DTE</h3>
+              <p>Registra y controla tus documentos de facturacion para El Salvador.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head">
+              <h3>Listado de Facturas</h3>
+              <button id="open-invoice-form">+ Agregar Factura</button>
+            </div>
+            <p class="muted">IVA aplicado automaticamente: 13%.</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>No. Control</th>
+                    <th>Paciente</th>
+                    <th>Servicio</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="invoices-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-billing-form" class="view">
+          <div class="card">
+            <div class="section-head">
+              <h3>Nueva Factura DTE</h3>
+              <button id="back-billing-list" class="secondary">Volver al Listado</button>
+            </div>
+            <form id="invoice-form" class="form-grid two-col">
+              <label>Tipo DTE
+                <select id="dteType">
+                  <option>Factura</option>
+                  <option>Comprobante de Credito Fiscal</option>
+                </select>
+              </label>
+              <label>Paciente
+                <select id="patientId" required></select>
+              </label>
+              <label>Forma de Pago
+                <select id="paymentMethod" required>
+                  <option>Efectivo</option>
+                  <option>Tarjeta</option>
+                  <option>Transferencia</option>
+                  <option>Credito</option>
+                </select>
+              </label>
+              <label>Cantidad
+                <input id="quantity" type="number" min="1" step="1" value="1" required />
+              </label>
+              <label>Precio Unitario (USD)
+                <input id="unitPrice" type="number" min="0.01" step="0.01" required />
+              </label>
+              <label class="span-2">Descripcion del Servicio
+                <input id="serviceDescription" required />
+              </label>
+              <details class="span-2 advanced-block">
+                <summary>Datos Avanzados de Facturacion</summary>
+                <div class="advanced-grid">
+                  <label>Razon Social
+                    <input id="businessName" value="Clinica Dental SV" />
+                  </label>
+                  <label>NIT Emisor
+                    <input id="businessNit" />
+                  </label>
+                  <label>NRC Emisor
+                    <input id="businessNrc" />
+                  </label>
+                  <label>Direccion Emisor
+                    <input id="businessAddress" />
+                  </label>
+                  <label class="span-2">Notas
+                    <textarea id="notes" rows="2"></textarea>
+                  </label>
+                </div>
+              </details>
+              <div class="span-2 actions">
+                <button type="submit">Guardar Factura</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="view-users-list" class="view hidden">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-team"></use></svg></div>
+            <div>
+              <h3>Administracion de Cuentas</h3>
+              <p>Solo administradores pueden gestionar cuentas y permisos del personal.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head">
+              <h3>Listado de Usuarios</h3>
+              <button id="open-user-form">+ Agregar Usuario</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-users-form" class="view hidden">
+          <div class="card">
+            <div class="section-head">
+              <h3>Nuevo Usuario</h3>
+              <button id="back-users-list" class="secondary">Volver al Listado</button>
+            </div>
+            <form id="user-form" class="form-grid two-col">
+              <label>Nombre Completo
+                <input id="user-fullName" required />
+              </label>
+              <label>Usuario
+                <input id="user-username" required />
+              </label>
+              <label>Contrasena Temporal
+                <input id="user-password" type="password" required />
+              </label>
+              <label>Rol
+                <select id="user-role">
+                  <option value="odontologo">Odontologo</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </label>
+              <div class="span-2 actions">
+                <button type="submit">Guardar Usuario</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="view-appointments-list" class="view">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-calendar"></use></svg></div>
+            <div>
+              <h3>Agenda y Recordatorios</h3>
+              <p>Organiza citas por fecha y evita choques de horario entre pacientes.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head">
+              <h3>Agenda y Recordatorios</h3>
+              <button id="open-appointment-form">+ Agendar Cita</button>
+            </div>
+            <div class="calendar-controls">
+              <button id="calendar-prev" class="secondary">Mes Anterior</button>
+              <strong id="calendar-title"></strong>
+              <button id="calendar-next" class="secondary">Mes Siguiente</button>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+            <h4>Citas del dia seleccionado: <span id="selected-date-label">-</span></h4>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Paciente</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Recordatorio</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="appointments-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-appointments-form" class="view">
+          <div class="card">
+            <div class="section-head">
+              <h3 id="appointment-form-title">Nueva Cita</h3>
+              <button id="back-appointments-list" class="secondary">Volver a Agenda</button>
+            </div>
+            <form id="appointment-form" class="form-grid two-col">
+              <input type="hidden" id="appointment-id" />
+              <label>Fecha
+                <input id="appointment-date" type="date" required />
+              </label>
+              <label>Paciente Registrado
+                <select id="appointment-patientId"></select>
+              </label>
+              <label class="span-2">Nombre Paciente (si no esta registrado)
+                <input id="appointment-patientName" required />
+              </label>
+              <label>Hora inicio
+                <input id="appointment-startTime" type="time" required />
+              </label>
+              <label>Hora fin
+                <input id="appointment-endTime" type="time" required />
+              </label>
+              <label class="span-2">Motivo de la cita
+                <input id="appointment-title" required />
+              </label>
+              <label>Estado de cita
+                <select id="appointment-status">
+                  <option value="pendiente">Pendiente</option>
+                  <option value="confirmada">Confirmada</option>
+                  <option value="atendida">Atendida</option>
+                  <option value="cancelada">Cancelada</option>
+                </select>
+              </label>
+              <label>Recordatorio (minutos antes)
+                <input id="appointment-reminderMinutes" type="number" min="0" value="30" />
+              </label>
+              <details class="span-2 advanced-block">
+                <summary>Campos Avanzados de Cita</summary>
+                <div class="advanced-grid">
+                  <label>Mensaje de recordatorio
+                    <input id="appointment-reminderMessage" />
+                  </label>
+                  <label class="span-2">Notas
+                    <textarea id="appointment-notes" rows="2"></textarea>
+                  </label>
+                </div>
+              </details>
+              <div class="span-2 actions">
+                <button type="submit">Guardar Cita</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="view-reports" class="view">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-chart"></use></svg></div>
+            <div>
+              <h3>Panel de Reportes</h3>
+              <p>Visualiza indicadores clave de operacion clinica y rendimiento financiero.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head">
+              <h3>Reportes</h3>
+              <div class="actions">
+                <button id="refresh-reports">Actualizar</button>
+                <button id="export-report-csv" class="secondary">Exportar CSV</button>
+                <button id="export-report-pdf" class="secondary">Exportar PDF</button>
+                <button id="toggle-reports-advanced" class="secondary">Ver mas</button>
+              </div>
+            </div>
+            <div id="reports-cards" class="report-grid"></div>
+          </div>
+          <div id="reports-advanced" class="hidden">
+            <div class="card">
+              <h3>Facturacion por Usuario</h3>
+              <p class="muted">Haz clic en un usuario para ver sus facturas.</p>
+              <div id="report-by-user" class="list-summary"></div>
+            </div>
+
+            <div class="card">
+              <h3>Citas por Estado</h3>
+              <p class="muted">Haz clic en un estado para ver las citas relacionadas.</p>
+              <div id="report-appointment-status" class="list-summary"></div>
+            </div>
+
+            <div class="card">
+              <div class="section-head">
+                <h3 id="report-detail-title">Detalle Interactivo</h3>
+                <button id="report-open-module" class="secondary hidden">Abrir Modulo</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th id="report-col1">Dato 1</th>
+                      <th id="report-col2">Dato 2</th>
+                      <th id="report-col3">Dato 3</th>
+                      <th id="report-col4">Dato 4</th>
+                    </tr>
+                  </thead>
+                  <tbody id="report-detail-table">
+                    <tr><td colspan="4">Selecciona un usuario o estado para ver detalle.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-audit" class="view hidden">
+          <div class="module-hero">
+            <div class="hero-icon"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#icon-log"></use></svg></div>
+            <div>
+              <h3>Bitacora de Auditoria</h3>
+              <p>Registro de cambios para trazabilidad y control administrativo.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-head">
+              <h3>Eventos Recientes</h3>
+              <div class="actions">
+                <button id="refresh-audit">Actualizar Bitacora</button>
+                <button id="export-audit-csv" class="secondary">Exportar CSV</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Accion</th>
+                    <th>Entidad</th>
+                    <th>Descripcion</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="delete-dialog">
+      <form id="delete-form" method="dialog" class="dialog-box">
+        <h3>Eliminar Paciente</h3>
+        <p>Esta accion elimina expediente y registros relacionados.</p>
+        <label><input type="checkbox" id="delete-check" /> Confirmo que revise el expediente correcto</label>
+        <label>Escribe ELIMINAR para confirmar
+          <input id="delete-text" />
+        </label>
+        <div class="actions">
+          <button type="submit" id="confirm-delete" disabled>Eliminar Definitivamente</button>
+          <button type="button" id="cancel-delete" class="secondary">Cancelar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
